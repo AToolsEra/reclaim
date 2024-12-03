@@ -2,12 +2,15 @@ import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/comp
 import { Input } from "@/components/ui/input";
 import { UseFormReturn } from "react-hook-form";
 import { FormData } from "./form";
+import ReclaimDemo from "@/components/Reclaim";
+import { useState } from "react";
 
 interface ProfessionalDetailsStepProps {
   form: UseFormReturn<FormData>;
 }
 
 export function ProfessionalDetailsStep({ form }: ProfessionalDetailsStepProps) {
+  const [loading, setLoading] = useState(false);
   return (
     <div className="space-y-6">
       <div>
@@ -21,7 +24,16 @@ export function ProfessionalDetailsStep({ form }: ProfessionalDetailsStepProps) 
           <FormItem>
             <FormLabel>GitHub Profile</FormLabel>
             <FormControl>
-              <Input placeholder="https://github.com/username" {...field} />
+              <>
+                <ReclaimDemo
+                  onVerify={(ghUrl) => {
+                    field.onChange(ghUrl);
+                  }}
+                  loading={loading}
+                  setLoading={setLoading}
+                />
+                {field.value && <Input readOnly placeholder="https://github.com/username" {...field} />}
+              </>
             </FormControl>
             <FormMessage />
           </FormItem>
